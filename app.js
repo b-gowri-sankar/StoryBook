@@ -23,13 +23,25 @@ const app = express();
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+//Logging
 if (process.env.NODE_ENV === "development") {
 	app.use(morgan("dev"));
 }
 
+//Handelerbar helpers
+
+const { formatDate, scriptTags, truncate, editIcon } = require("./helpers/hbs");
+
 //Handlebar
 
-app.engine(".hbs", exphbs({ extname: ".hbs", defaultLayout: "main" }));
+app.engine(
+	".hbs",
+	exphbs({
+		helpers: { formatDate, scriptTags, truncate, editIcon },
+		extname: ".hbs",
+		defaultLayout: "main",
+	})
+);
 app.set("view engine", ".hbs");
 
 //session middleware
@@ -49,6 +61,14 @@ app.use(
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+//Set global var
+
+app.use(function (req, res, next) {
+	res.locals.user = req.user || null;
+	next();
+});
+
 //static folder
 app.use(express.static(path.join(__dirname, "public")));
 

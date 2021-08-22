@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema({
 		type: String,
 		required: true,
 	},
-	Image: {
+	image: {
 		type: String,
 	},
 	createdAt: {
@@ -26,4 +26,4 @@ const userSchema = new mongoose.Schema({
 	},
 });
 
-module.exports = mongoose.model("user", userSchema);
+module.exports = mongoose.model("User", userSchema);
