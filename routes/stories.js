@@ -108,4 +108,22 @@ router.delete("/:id", ensureAuth, async (req, res) => {
 	}
 });
 
+//@desc get Story
+//@route GET /:id
+
+router.get("/:id", ensureAuth, async (req, res) => {
+	try {
+		let story = await Story.findById(req.params.id).populate("user").lean();
+		if (!story) {
+			return res.render("error/404");
+		}
+		res.render("stories/show", {
+			story,
+		});
+	} catch (err) {
+		console.error(err);
+		return res.render("error/404");
+	}
+});
+
 module.exports = router;
